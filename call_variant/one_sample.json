@@ -1,0 +1,10 @@
+{
+  "varaint_select.inputbam": "File",
+  "varaint_select.name": "String",
+  "varaint_select.refindex": "File",
+  "varaint_select.gatk_local_jar": "File",
+  "varaint_select.refdict": "File",
+  "varaint_select.bamindex": "File",
+  "varaint_select.reffasta": "File",
+  "varaint_select.gatk": "File"
+}
