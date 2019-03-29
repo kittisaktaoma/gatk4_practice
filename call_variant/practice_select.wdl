@@ -61,7 +61,6 @@ task haplotypeCaller {
              -R ${RefFasta} \
              -I ${inputBAM} \
              -O ${sample}.g.vcf \
-             -ERC GVCF
   }
   output {
     File rawVCF = "${sample}.g.vcf"
