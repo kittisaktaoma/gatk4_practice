@@ -1,6 +1,3 @@
-## combine gVCF is stil bug with this error "Key END found in VariantContext field INFO at 20:10004769 but this key isn't defined in the VCFHeader.
-## We require all VCFs to have complete VCF headers by default."
-
 workflow varaint_select {
   File refindex
   File refdict
@@ -67,11 +64,6 @@ workflow varaint_select {
   }
   call combine {
     input: sample=name,
-      RefFasta=reffasta,
-      GATK=gatk,
-      RefDict=refdict,
-      GATK_jar=gatk_local_jar,
-      RefIndex=refindex, 
       filteredSNPs=hardFilterSNP.filteredSNPs, 
       filteredIndels=hardFilterIndel.filteredIndels  # input=task.output
   }
@@ -169,25 +161,21 @@ task hardFilterIndel {
   }
 }
 
-# this Task is still bug due to 
+# merge VCF file 
 task combine {
-  File GATK
-  File GATK_jar
-  File RefFasta
-  File RefIndex
-  File RefDict
+
   String sample
   File filteredSNPs
   File filteredIndels
 
   command {
-	${GATK} CombineGVCFs \
-        -R ${RefFasta} \
-        --variant ${filteredSNPs} \
-        --variant ${filteredIndels} \
-        -O ${sample}.filtered.snps.indels.vcf
+        bgzip -c ${filteredSNPs} > ${sample}_snps.vcf.gz
+        bgzip -c ${filteredIndels} > ${sample}_indels.vcf.gz
+        tabix -p vcf ${sample}_snps.vcf.gz
+        tabix -p vcf ${sample}_indels.vcf.gz
+	vcf-merge ${sample}_snps.vcf.gz ${sample}_indels.vcf.gz | bgzip -c > ${sample}.filtered.snps.indels.vcf.gz
   }
   output {
-    File filteredVCF = "${sample}.filtered.snps.indels.vcf"
+    File filteredVCF = "${sample}.filtered.snps.indels.vcf.gz"
   }
 }
