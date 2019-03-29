@@ -1,3 +1,6 @@
+## combine gVCF is stil bug with this error "Key END found in VariantContext field INFO at 20:10004769 but this key isn't defined in the VCFHeader.
+## We require all VCFs to have complete VCF headers by default."
+
 workflow varaint_select {
   File refindex
   File refdict
@@ -66,17 +69,17 @@ workflow varaint_select {
     input: sample=name,
       RefFasta=reffasta,
       GATK=gatk,
+      RefDict=refdict,
       GATK_jar=gatk_local_jar,
       RefIndex=refindex, 
       filteredSNPs=hardFilterSNP.filteredSNPs, 
-      filteredIndels=hardFilterIndel.filteredIndels
+      filteredIndels=hardFilterIndel.filteredIndels  # input=task.output
   }
 
 }
 
-
+# call SNPs and Indel
 task haplotypeCaller {
-  
   File RefIndex
   File RefDict
   File bamIndex
@@ -97,7 +100,7 @@ task haplotypeCaller {
   }
 }
 
-
+# Separate SNPs and Indels
 task select {
   File GATK
   File GATK_jar
@@ -120,7 +123,7 @@ task select {
   }
 }
 
-
+#Filter SNPs
 task hardFilterSNP {
   File GATK
   File GATK_jar
@@ -136,14 +139,14 @@ task hardFilterSNP {
       -V ${rawSNPs} \
       -O ${sample}.filtered.snps.vcf \
       --filter-name "filter_SNPs" \
-      --filter-expression "QUAL > 30.0 && DP == 10"
+      --filter-expression "QUAL > 30.0 && DP == 10" # This can be any threhsold 
   }
   output {
     File filteredSNPs = "${sample}.filtered.snps.vcf"
   }
 }
 
-
+# Filter Indels
 task hardFilterIndel {
   File GATK
   File GATK_jar
@@ -166,12 +169,13 @@ task hardFilterIndel {
   }
 }
 
-
+# this Task is still bug due to 
 task combine {
   File GATK
   File GATK_jar
   File RefFasta
   File RefIndex
+  File RefDict
   String sample
   File filteredSNPs
   File filteredIndels
