@@ -7,6 +7,7 @@ workflow align{
 	
 
 	scatter (sample in Samples) {
+		
 		call bwa {
 			input: RefFasta=refFasta,
 			Sample=sample[0],
@@ -17,7 +18,19 @@ workflow align{
 		call SortSam {
 			input: PIC=pic,
                         Sam=bwa.sam,
-                        sample=sample[0]
+                        Sample=sample[0]
+		}
+
+		call dedup {
+			input: PIC=pic,
+                        SamInput=SortSam.sortsam,
+                        Sample=sample[0]
+		}
+		
+		call SamToBam {
+			input: PIC=pic,
+                        SamInput=dedup.DedupSam,
+                        Sample=sample[0]
 		}
 	}
 }
@@ -60,17 +73,55 @@ task SortSam {
 
 	File PIC
 	File Sam
-	String sample
+	String Sample
 	
 	command {
 	java -jar ${PIC} SortSam \
-	      I=${Sam} \
-              O=${sample}_sorted.bam \
-	      SORT_ORDER=coordinate
+		I=${Sam} \
+                O=${Sample}_sorted.bam \
+	        SORT_ORDER=coordinate
 	}
 
 	output {
-	File sortsam = "${sample}_sorted.bam"
+	File sortsam = "${Sample}_sorted.sam"
         }
 }
 
+
+
+task dedup {
+
+	File PIC
+	File SamInput
+	String Sample
+
+	command {
+	java -jar ${PIC} MarkDuplicates \
+		I=${SamInput} \
+		O=${Sample}_NoDuplicates.sam \
+		--REMOVE_DUPLICATE=TRUE \
+		--REMOVE_SEQUENCING_DUPLICATES=TRUE
+	}
+	 
+	output {
+	File DedupSam = "${Sample}_NoDuplicates.sam"
+	}
+}
+
+
+task SamToBam {
+
+	File PIC
+	File SamInput
+	File Sample
+
+	command {
+	java -jar ${PIC} SamFormatConverter \
+		I=${SamInput} \
+		O=${Sample}.bam
+	}
+	
+	output {
+	File Bam = "${Sample}.bam"
+	}
+}
