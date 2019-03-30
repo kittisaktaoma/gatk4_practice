@@ -78,7 +78,7 @@ task SortSam {
 	command {
 	java -jar ${PIC} SortSam \
 		I=${Sam} \
-                O=${Sample}_sorted.bam \
+                O=${Sample}_sorted.sam \
 	        SORT_ORDER=coordinate
 	}
 
@@ -98,9 +98,10 @@ task dedup {
 	command {
 	java -jar ${PIC} MarkDuplicates \
 		I=${SamInput} \
+		M=Mark_duplicate.txt \
 		O=${Sample}_NoDuplicates.sam \
-		--REMOVE_DUPLICATE=TRUE \
-		--REMOVE_SEQUENCING_DUPLICATES=TRUE
+		REMOVE_DUPLICATES=TRUE \
+		REMOVE_SEQUENCING_DUPLICATES=TRUE
 	}
 	 
 	output {
@@ -113,7 +114,7 @@ task SamToBam {
 
 	File PIC
 	File SamInput
-	File Sample
+	String Sample
 
 	command {
 	java -jar ${PIC} SamFormatConverter \
