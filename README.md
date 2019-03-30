@@ -9,7 +9,8 @@
     3.1 Haplotype caller is already updated to call indel accurately
   4. Base Recalibration <br>
     4.1 Varint sites are used from this bundle ftp://ftp.broadinstitute.org/bundle/b37/
-    
+      4.2 using `gatk IndexFeatureFile -F cohort.vcf.gz` for creating index
+ 
 ## Phase II: Variant Calling (Done)
   1. GVCF workflow
   2. RawVCF workflow
