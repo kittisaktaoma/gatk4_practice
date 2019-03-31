@@ -18,7 +18,7 @@
       4.2 using `gatk IndexFeatureFile -F cohort.vcf.gz` for creating index
  
 ## Phase II: Variant Calling 
-  1. **GVCF workflow <br>
+  1. **GVCF workflow** <br>
   
   2. **RawVCF workflow** <br>
   
