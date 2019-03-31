@@ -51,7 +51,8 @@ task bwa {
 
 	command{
 		bwa index \
-		    ${RefFasta}
+		    ${RefFasta} \
+		    > RefIndex.fasta.fai
 		bwa aln \
 		    ${RefFasta} \
 		    ${F} \
@@ -70,7 +71,7 @@ task bwa {
 	}
 	output{
 		File sam = "${Sample}.sam"
-		String name = "${Sample}"
+		File RefIndex = "RefIndex.fasta.fai"
 	} 
 }	
 
