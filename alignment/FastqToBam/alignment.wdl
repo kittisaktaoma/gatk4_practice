@@ -32,6 +32,12 @@ workflow align{
                         SamInput=dedup.DedupSam,
                         Sample=sample[0]
 		}
+
+		call IndexBam {
+                        input: PIC=pic,
+                        bam=SamToBam.Bam,
+                        Sample=sample[0]
+		}
 	}
 }
 
@@ -125,4 +131,22 @@ task SamToBam {
 	output {
 	File Bam = "${Sample}.bam"
 	}
+}
+
+
+task IndexBam {
+
+	File PIC
+	File bam
+	String Sample
+
+	command {
+	java -jar ${PIC} BuildBamIndex \
+	I=${bam} \
+	O=${Sample}.bam.bai
+	}
+
+	output {
+	File BamIndex= "${Sample}.bam.bai"
+	}	
 }
