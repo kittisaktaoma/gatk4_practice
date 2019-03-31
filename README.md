@@ -1,9 +1,9 @@
 # gatk4_practice
 ## Resource Bundle 
-  Fastq:
-  HG00096 : ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/) <br>
-  HG00097 : ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00097/) <br>
-  RefFasta: ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/
+  Fastq: <br>
+  HG00096 : ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/ <br>
+  HG00097 : ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00097/ <br>
+  RefFasta: ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/  <br>
   
 ## Phase I: NGS Provessing 
   1. **Sequence Alignemnt** <br>
