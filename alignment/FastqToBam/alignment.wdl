@@ -15,10 +15,18 @@ workflow align{
 			R=sample[2]
 		}
 	
+		output {
+                   File RefIndex = "bwa.RefIndex"
+		}
+	
 		call RefDict {
 			input: RefFasta=refFasta,
                         PIC=pic
 		}
+		 output {
+                   File RefDict = "RefDict.RefDict"
+                 }
+
 
 		call SortSam {
 			input: PIC=pic,
@@ -37,12 +45,18 @@ workflow align{
                         SamInput=dedup.DedupSam,
                         Sample=sample[0]
 		}
-
+		 output {
+                 File Bam = "SamToBam.Bam"
+                 }
+		
 		call IndexBam {
                         input: PIC=pic,
                         bam=SamToBam.Bam,
                         Sample=sample[0]
 		}
+		 output {
+                 File BamIndex = "IndexBam.BamIndex"
+                 }
 	}
 }
 
