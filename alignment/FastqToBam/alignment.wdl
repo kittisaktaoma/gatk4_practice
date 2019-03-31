@@ -14,6 +14,11 @@ workflow align{
 			F=sample[1],
 			R=sample[2]
 		}
+	
+		call RefDict {
+			input: RefFasta=refFasta,
+                        PIC=pic
+		}
 
 		call SortSam {
 			input: PIC=pic,
@@ -74,6 +79,27 @@ task bwa {
 		File RefIndex = "RefIndex.fasta.fai"
 	} 
 }	
+
+
+task RefDict {
+	File RefFasta
+        File PIC
+
+	command {
+	java -jar ${PIC} CreateSequenceDictionary \
+                    R=${RefFasta} \
+                    O=RefFasta.dict
+}
+	
+	output {
+	File RefDict = "RefFasta.dict"
+	}
+
+}
+
+
+
+
 
 
 task SortSam {
