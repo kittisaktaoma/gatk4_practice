@@ -1,33 +1,78 @@
+import "../alignment/FastqToBam/alignment.wdl" as aln
+
 workflow joinGenotype {
  
   File inputSamplesFile
-  Array[Array[File]] inputSamples = read_tsv(inputSamplesFile)
+  Array[Array[File]] Samples = read_tsv(inputSamplesFile)
   File gatk
+  File picard
   File gatk_jar
   File refFasta
   File refIndex
   File refDict
+  File mapping
+  File bam_RG
 
-  scatter (sample in inputSamples) {
-    call HaplotypeCallerERC {
+  scatter (sample in Samples) {
+
+  call aln.bwa {
+	input: 
+	Sample=sample[0],
+	RefFasta=refFasta,
+	F=sample[1],
+	R=sample[2],
+        MAP=mapping,
+	Bam=bam_RG
+	}
+
+  call aln.SortSam {
+	input:
+	PIC=picard,
+	Sam=bwa.sam,
+	Sample=sample[0]
+	}
+
+  call aln.dedup {
+	input:
+	PIC=picard,
+	SamInput=SortSam.sortsam,
+	Sample=sample[0]
+	}
+
+  call aln.SamToBam {
+	input:
+	PIC=picard,
+        SamInput=dedup.DedupSam,
+        Sample=sample[0]
+	}
+
+  call aln.IndexBam {
+       input:
+	PIC=picard, 
+	bam=SamToBam.Bam,
+        Sample=sample[0]
+      }
+
+  
+  call HaplotypeCallerERC {
         input: GATK=gatk,
         GATK_jar=gatk_jar, 
         RefFasta=refFasta, 
         RefIndex=refIndex, 
         RefDict=refDict, 
         Sample=sample[0],
-        BamFile=sample[1], 
-        BamIndex=sample[2]
+        BamFile=SamToBam.Bam, 
+        BamIndex=IndexBam.BamIndex
   }
-  }
+  
 
   call CombineGVCFs {  
       input: GATK=gatk,
       GATK_jar=gatk_jar, 
       RefFasta=refFasta, 
-      RefIndex=refIndex, 
+      RefIndex=refIndex,
       RefDict=refDict, 
-      Sample="CEUtrio", 
+      Sample=sample[0], 
       GVCFs=HaplotypeCallerERC.GVCF
 }
 
@@ -37,15 +82,17 @@ workflow joinGenotype {
       RefFasta=refFasta,
       RefIndex=refIndex,
       RefDict=refDict,
-      Sample="raw_varaint",
+      Sample=sample[0],
       cGVCFs=CombineGVCFs.CombineGVCFs
 }
 
+}
 
 }
 
 
   task HaplotypeCallerERC {
+    
     File GATK
     File GATK_jar
     File RefFasta
@@ -54,13 +101,15 @@ workflow joinGenotype {
     String Sample
     File BamFile
     File BamIndex
-
+	
+   
   command {
-    ${GATK} --java-options "-Xmx4g" HaplotypeCaller \
+
+    ${GATK} --java-options '-DGATK_STACKTRACE_ON_USER_EXCEPTION=true'  HaplotypeCaller \
              -ERC GVCF \
              -R ${RefFasta} \
              -I ${BamFile} \
-             -O ${Sample}.g.vcf 
+             -O ${Sample}.g.vcf           
   }
   output {
     File GVCF = "${Sample}.g.vcf"

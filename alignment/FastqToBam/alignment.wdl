@@ -1,64 +1,4 @@
-workflow align{
-	
-	File Input
-	Array[Array[File]] Samples = read_tsv(Input)
-	File refFasta
-        File pic
-	
-
-	scatter (sample in Samples) {
-		
-		call bwa {
-			input: RefFasta=refFasta,
-			Sample=sample[0],
-			F=sample[1],
-			R=sample[2]
-		}
-	
-		output {
-                   File RefIndex = "bwa.RefIndex"
-		}
-	
-		call RefDict {
-			input: RefFasta=refFasta,
-                        PIC=pic
-		}
-		 output {
-                   File RefDict = "RefDict.RefDict"
-                 }
-
-
-		call SortSam {
-			input: PIC=pic,
-                        Sam=bwa.sam,
-                        Sample=sample[0]
-		}
-
-		call dedup {
-			input: PIC=pic,
-                        SamInput=SortSam.sortsam,
-                        Sample=sample[0]
-		}
-		
-		call SamToBam {
-			input: PIC=pic,
-                        SamInput=dedup.DedupSam,
-                        Sample=sample[0]
-		}
-		 output {
-                 File Bam = "SamToBam.Bam"
-                 }
-		
-		call IndexBam {
-                        input: PIC=pic,
-                        bam=SamToBam.Bam,
-                        Sample=sample[0]
-		}
-		 output {
-                 File BamIndex = "IndexBam.BamIndex"
-                 }
-	}
-}
+workflow align{ }
 
 
 task bwa {
@@ -67,53 +7,20 @@ task bwa {
 	String Sample
 	File F
 	File R
+	File MAP
+	File Bam
+	
 
-	command{
-		bwa index \
-		    ${RefFasta} \
-		    > RefIndex.fasta.fai
-		bwa aln \
-		    ${RefFasta} \
-		    ${F} \
-		    > ${Sample}_F.sai
-		bwa aln \
-		    ${RefFasta} \
-		    ${R} \
-		    > ${Sample}_R.sai
-		bwa sampe \
-		    ${RefFasta} \
-		    ${Sample}_F.sai \
-		    ${Sample}_R.sai \
-                    ${F} \
-		    ${R} \
-                    > ${Sample}.sam
-	}
+	command <<<
+
+		${MAP} ${RefFasta} ${Sample} ${F} ${R} ${Bam}
+
+	>>>
+
 	output{
 		File sam = "${Sample}.sam"
-		File RefIndex = "RefIndex.fasta.fai"
 	} 
-}	
-
-
-task RefDict {
-	File RefFasta
-        File PIC
-
-	command {
-	java -jar ${PIC} CreateSequenceDictionary \
-                    R=${RefFasta} \
-                    O=RefFasta.dict
 }
-	
-	output {
-	File RefDict = "RefFasta.dict"
-	}
-
-}
-
-
-
-
 
 
 task SortSam {
@@ -176,7 +83,6 @@ task SamToBam {
 
 
 task IndexBam {
-
 	File PIC
 	File bam
 	String Sample
@@ -188,6 +94,7 @@ task IndexBam {
 	}
 
 	output {
-	File BamIndex= "${Sample}.bam.bai"
-	}	
+	File BamIndex = "${Sample}.bam.bai"
+	}
+		
 }
