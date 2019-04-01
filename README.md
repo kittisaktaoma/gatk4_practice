@@ -24,7 +24,7 @@
   2. **Remove duplicate read** <br>
     2.1 Using Picard 
   3. **Local realignment** <br> 
-    3.1 This step will not done here in my pipeline
+    3.1 This step will not done here in my pipeline <br>
     3.2 Haplotype caller is already updated to call indel accurately
   4. **Base Recalibration** <br>
     4.1 Varint sites are used from this bundle ftp://ftp.broadinstitute.org/bundle/b37/ <br>
@@ -37,19 +37,17 @@
   1. **GVCF workflow: multi-sample** <br>
      1.1 Call Variant using Haplotypecaller with `GVCF flag`
          IndexBam file is already provided but it still but with this error massage <br>
-         ***A USER ERROR has occurred: Traversal by intervals was requested but some input files are not indexed. Please index all input files:***
-     1.2 CombineGVCF 
+         ***A USER ERROR has occurred: Traversal by intervals was requested but some input files are not indexed. Please index all input files:*** <br>
+     1.2 CombineGVCF <br> 
      1.3 GenotypeGVCF (estimated cohort genotype)
   2. **RawVCF workflow: one sample** <br>
-     2.1 Call Varint using Haplotype caller without `GVCF flag`
-     2.2 Separated Indel and Snps for hard filtering
+     2.1 Call Varint using Haplotype caller without `GVCF flag` <br>
+     2.2 Separated Indel and Snps for hard filtering <br>
      2.3 combine SNP and indel VCF files using `vcf-merge`
     
   3. **Variant Manipulation** <br>
     3.1 **Varaint Quality Control** <br>
     Hard filtering in ***2.2*** is used instead of building model <br>
-    
-    ### 3.2 and 3.3 are not performed yet
     3.2 **Haplotype Phasing** <br>
     Because GATK4 dont have `ReadBackedPhasing` function, Shapeit or Eagles will beused instead. <br>
     3.3 **Variant Annotation** <br>
