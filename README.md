@@ -39,7 +39,7 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
        4.1.2 ***Script is already prepared but not imported into main script yet.*** <br>
   
     
-## Phase II: Variant Calling  (Part 3 not done yet)
+## Phase II: Variant Calling  
 
   1. **GVCF workflow: multi-sample ('`multiple_sample.wdl`')** <br>
      1.1 Call Variant using Haplotypecaller with `GVCF flag` <br> 
@@ -51,7 +51,7 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
      2.2 Separated Indel and Snps for hard filtering <br>
      2.3 combine SNP and indel VCF files using `vcf-merge`
      
-  3. **Variant Manipulation** <br>
+  3. **Variant Manipulation (Part 3 not done yet)** <br>
     3.1 **Varaint Quality Control** <br>
     Hard filtering in ***2.2*** is used instead of building model <br>
     3.2 **Haplotype Phasing** <br>
