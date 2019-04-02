@@ -16,7 +16,7 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
   **Paired-end alignment Dataset** <br> 
   [One sample dataset](https://drive.google.com/drive/folders/1aBcbV_Hlyg0wOOmZDDSBeIc0uw1r3f_w)  <br>
   **Varaint Calling (GVCF mode)** <br> 
-  Dataset with mulitple sample retrieved from [this tutorial] (https://software.broadinstitute.org/wdl/documentation/article?id=7614)  <br>
+  Dataset with mulitple sample retrieved from [this tutorial](https://software.broadinstitute.org/wdl/documentation/article?id=7614)  <br>
   **Variant Site** <br>
   Varint sites for base and variant recalibration are used from ftp://ftp.broadinstitute.org/bundle/b37/
   
