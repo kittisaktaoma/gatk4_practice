@@ -1,5 +1,5 @@
 ## Summary Step of Gatk4_Practice
-1. Preparing Docker container &#x2611;
+1. Preparing Docker container used in our method &#x2611;
 2. Creating Workflow Description Language (WDL) workflow that references the tool’s Docker image. &#x2611;
 3. Use Cromwell to test the WDL and dockerized tool locally. &#x2611;
 4. Create a method in FireCloud using the WDL workflow you just tested. (**Not Done Yet**)
