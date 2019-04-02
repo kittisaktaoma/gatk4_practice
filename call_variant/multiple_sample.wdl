@@ -105,12 +105,13 @@ workflow joinGenotype {
    
   command {
 
-    ${GATK} --java-options '-DGATK_STACKTRACE_ON_USER_EXCEPTION=true'  HaplotypeCaller \
+    ${GATK} --java-options "-Xmx4g" HaplotypeCaller \
              -ERC GVCF \
              -R ${RefFasta} \
              -I ${BamFile} \
              -O ${Sample}.g.vcf           
   }
+  
   output {
     File GVCF = "${Sample}.g.vcf"
   }
