@@ -39,10 +39,10 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
        4.1.2 ***Script is already prepared but not imported into main script yet.*** <br>
   
     
-## Phase II: Variant Calling 
+## Phase II: Variant Calling  (Part 3 not done yet)
 
   1. **GVCF workflow: multi-sample ('`multiple_sample.wdl`')** <br>
-     1.1 Call Variant using Haplotypecaller with `GVCF flag`
+     1.1 Call Variant using Haplotypecaller with `GVCF flag` <br> 
      1.2 CombineGVCF <br> 
      1.3 GenotypeGVCF (estimated cohort genotype)
      
