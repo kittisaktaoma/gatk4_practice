@@ -41,12 +41,12 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
     
 ## Phase II: Variant Calling 
 
-  1. **GVCF workflow: multi-sample ('multiple_sample.wdl')** <br>
+  1. **GVCF workflow: multi-sample ('`multiple_sample.wdl`')** <br>
      1.1 Call Variant using Haplotypecaller with `GVCF flag`
      1.2 CombineGVCF <br> 
      1.3 GenotypeGVCF (estimated cohort genotype)
      
-  2. **RawVCF workflow: one sample ('one_sample.wdl')** <br>
+  2. **RawVCF workflow: one sample ('`one_sample.wdl`')** <br>
      2.1 Call Varint using Haplotype caller without `GVCF flag` <br>
      2.2 Separated Indel and Snps for hard filtering <br>
      2.3 combine SNP and indel VCF files using `vcf-merge`
