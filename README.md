@@ -29,7 +29,7 @@ I have modified and updated software version within  [Genomes-in-the-cloud](http
 ## Phase I: NGS Processing (`PE_aln.wdl`)
   1. **Sequence alignemnt** <br>
      1.1 Paired-end alignment is aligned by BWA in `PE_aln.wdl` script <br>
-     1.2 Read Group tag is not implement in `bwa task` yet, Thus `PE_aln.wdl` scritp is still not compatible with varaint calling in paired end sample in GATK.
+     1.2 Read Group tag is not implemented in `bwa task` yet, Thus `PE_aln.wdl` scritp is still not compatible with varaint calling in paired end sample in GATK.
      
   2. **Remove duplicate read** <br>
     2.1 Using Picard 
